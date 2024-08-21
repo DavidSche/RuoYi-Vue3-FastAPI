@@ -17,15 +17,9 @@
 RuoYi-Vue3-FastAPI是一套全部开源的快速开发平台，毫无保留给个人及企业免费使用。
 
 * 前端采用Vue3、Element Plus，基于<u>[RuoYi-Vue3](https://github.com/yangzongzhuan/RuoYi-Vue3)</u>前端项目修改。
-* 后端采用FastAPI、sqlalchemy、MySQL、Redis、OAuth2 & Jwt。
+* 后端采用FastAPI、sqlalchemy、PostgreSQL、Redis、OAuth2 & Jwt。
 * 权限认证使用OAuth2 & Jwt，支持多终端认证系统。
 * 支持加载动态权限菜单，多方式轻松权限控制。
-* Vue2版本：
-  - Gitte仓库地址：https://gitee.com/insistence2022/RuoYi-Vue-FastAPI
-  - GitHub仓库地址：https://github.com/insistence/RuoYi-Vue-FastAPI
-* 纯Python版本：
-  - Gitte仓库地址：https://gitee.com/insistence2022/dash-fastapi-admin
-  - GitHub仓库地址：https://github.com/insistence/Dash-FastAPI-Admin
 * 特别鸣谢：<u>[RuoYi-Vue3](https://github.com/yangzongzhuan/RuoYi-Vue3)</u>
 
 ## 内置功能
@@ -41,10 +35,9 @@ RuoYi-Vue3-FastAPI是一套全部开源的快速开发平台，毫无保留给�
 9.  操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
 10. 登录日志：系统登录日志记录查询包含登录异常。
 11. 在线用户：当前系统中活跃用户状态监控。
-12. 定时任务：在线（添加、修改、删除）任务调度包含执行结果日志。
-13. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
-14. 缓存监控：对系统的缓存信息查询，命令统计等。
-15. 系统接口：根据业务代码自动生成相关的api接口文档。
+12. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
+13. 缓存监控：对系统的缓存信息查询，命令统计等。
+14. 系统接口：根据业务代码自动生成相关的api接口文档。
 
 ## 演示图
 
@@ -101,8 +94,8 @@ RuoYi-Vue3-FastAPI是一套全部开源的快速开发平台，毫无保留给�
 
 ```bash
 # 克隆项目
-git clone https://gitee.com/insistence2022/RuoYi-Vue3-FastAPI.git
-
+git clone https://gitee.com/DavidSche/RuoYi-Vue3-FastAPI.git
+git checkout postgresql
 # 进入项目根目录
 cd RuoYi-Vue3-FastAPI
 ```
@@ -134,8 +127,8 @@ pip3 install -r requirements.txt
 在.env.dev文件中配置开发环境的数据库和redis
 
 # 运行sql文件
-1.新建数据库ruoyi-fastapi(默认，可修改)
-2.使用命令或数据库连接工具运行sql文件夹下的ruoyi-fastapi.sql
+1.新建数据库ruoyi-postgresql(默认，可修改)
+2.使用命令或数据库连接工具运行sql文件夹下的ruoyi-postgresql.sql
 
 # 运行后端
 python3 app.py --env=dev
@@ -172,13 +165,4 @@ python3 app.py --env=prod
 ```
 
 ## 交流与赞助
-如果有对本项目及FastAPI感兴趣的朋友，欢迎加入知识星球一起交流学习，让我们一起变得更强。如果你觉得这个项目帮助到了你，你可以请作者喝杯咖啡表示鼓励☕。扫描下面微信二维码添加微信备注VF-Admin即可进群。
-<table>
-    <tr>
-        <td><img alt="zsxq" src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/zsxq.jpg"></td>
-        <td><img alt="zanzhu" src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/zanzhu.jpg"></td>
-    </tr>
-    <tr>
-        <td><img alt="wxcode" src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/wxcode.jpg"></td>
-    </tr>
-</table>
+如果有对本项目及FastAPI感兴趣的朋友，欢迎一起交流学习，让我们一起变得更强。。
