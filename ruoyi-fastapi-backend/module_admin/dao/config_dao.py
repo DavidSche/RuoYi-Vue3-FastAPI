@@ -3,6 +3,7 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.config_do import SysConfig
 from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel
+from utils.id_util import SnowFlakeID
 from utils.page_util import PageUtil
 
 
@@ -87,6 +88,8 @@ class ConfigDao:
         :return:
         """
         db_config = SysConfig(**config.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_config.config_id = worker.generate_id()
         db.add(db_config)
         await db.flush()
 

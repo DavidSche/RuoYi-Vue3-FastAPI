@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, BigInteger
 from config.database import Base
 
 
@@ -10,8 +10,8 @@ class SysDept(Base):
 
     __tablename__ = 'sys_dept'
 
-    dept_id = Column(Integer, primary_key=True, autoincrement=True, comment='部门id')
-    parent_id = Column(Integer, default=0, comment='父部门id')
+    dept_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='部门id')
+    parent_id = Column(BigInteger, default=0, comment='父部门id')
     ancestors = Column(String(50), nullable=True, default='', comment='祖级列表')
     dept_name = Column(String(30), nullable=True, default='', comment='部门名称')
     order_num = Column(Integer, default=0, comment='显示顺序')

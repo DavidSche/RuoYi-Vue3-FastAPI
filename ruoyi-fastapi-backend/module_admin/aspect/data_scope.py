@@ -61,7 +61,8 @@ class GetDataScope:
                 )
             elif role.data_scope == self.DATA_SCOPE_DEPT_AND_CHILD:
                 param_sql_list.append(
-                    f"{self.query_alias}.{self.dept_alias}.in_(select(SysDept.dept_id).where(or_(SysDept.dept_id == {dept_id}, func.find_in_set({dept_id}, SysDept.ancestors)))) if hasattr({self.query_alias}, '{self.dept_alias}') else 1 == 0"
+                    # f"{self.query_alias}.{self.dept_alias}.in_(select(SysDept.dept_id).where(or_(SysDept.dept_id == {dept_id}, func.find_in_set({dept_id}, SysDept.ancestors)))) if hasattr({self.query_alias}, '{self.dept_alias}') else 1 == 0"
+                    f"{self.query_alias}.{self.dept_alias}.in_(select(SysDept.dept_id).where(or_(SysDept.dept_id == {dept_id}, cast({dept_id}, INTEGER) == func.any(cast(func.string_to_array(SysDept.ancestors, ','), ARRAY(INTEGER)))))) if hasattr({self.query_alias}, '{self.dept_alias}') else 1 == 0"
                 )
             elif role.data_scope == self.DATA_SCOPE_SELF:
                 param_sql_list.append(

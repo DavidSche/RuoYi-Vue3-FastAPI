@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.log_do import SysLogininfor, SysOperLog
 from module_admin.entity.vo.log_vo import LogininforModel, LoginLogPageQueryModel, OperLogModel, OperLogPageQueryModel
 from utils.common_util import SnakeCaseUtil
+from utils.id_util import SnowFlakeID
 from utils.page_util import PageUtil
 
 
@@ -61,6 +62,8 @@ class OperationLogDao:
         :return: 新增校验结果
         """
         db_operation_log = SysOperLog(**operation_log.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_operation_log.oper_id = worker.generate_id()
         db.add(db_operation_log)
         await db.flush()
 
@@ -143,6 +146,9 @@ class LoginLogDao:
         :return: 新增校验结果
         """
         db_login_log = SysLogininfor(**login_log.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_login_log.info_id = worker.generate_id()
+
         db.add(db_login_log)
         await db.flush()
 

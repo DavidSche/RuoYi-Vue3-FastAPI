@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, BigInteger
 from config.database import Base
 
 
@@ -10,9 +10,9 @@ class SysMenu(Base):
 
     __tablename__ = 'sys_menu'
 
-    menu_id = Column(Integer, primary_key=True, autoincrement=True, comment='菜单ID')
+    menu_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='菜单ID')
     menu_name = Column(String(50), nullable=False, default='', comment='菜单名称')
-    parent_id = Column(Integer, default=0, comment='父菜单ID')
+    parent_id = Column(BigInteger, default=0, comment='父菜单ID')
     order_num = Column(Integer, default=0, comment='显示顺序')
     path = Column(String(200), nullable=True, default='', comment='路由地址')
     component = Column(String(255), nullable=True, default=None, comment='组件路径')

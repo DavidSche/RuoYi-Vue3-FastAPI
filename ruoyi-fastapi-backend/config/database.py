@@ -5,13 +5,17 @@ from sqlalchemy.orm import DeclarativeBase
 from urllib.parse import quote_plus
 from config.env import DataBaseConfig
 
-ASYNC_SQLALCHEMY_DATABASE_URL = (
-    f'mysql+asyncmy://{DataBaseConfig.db_username}:{quote_plus(DataBaseConfig.db_password)}@'
+
+# POSTGRESQL='postgresql+asyncpg:'
+# MYSQL='mysql+asyncmy:'
+
+SQLALCHEMY_DATABASE_URL = (
+    f'postgresql+asyncpg://{DataBaseConfig.db_username}:{quote_plus(DataBaseConfig.db_password)}@'
     f'{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/{DataBaseConfig.db_database}'
 )
 
 async_engine = create_async_engine(
-    ASYNC_SQLALCHEMY_DATABASE_URL,
+    SQLALCHEMY_DATABASE_URL,
     echo=DataBaseConfig.db_echo,
     max_overflow=DataBaseConfig.db_max_overflow,
     pool_size=DataBaseConfig.db_pool_size,

@@ -2,6 +2,7 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.job_do import SysJob
 from module_admin.entity.vo.job_vo import JobModel, JobPageQueryModel
+from utils.id_util import SnowFlakeID
 from utils.page_util import PageUtil
 
 
@@ -97,6 +98,8 @@ class JobDao:
         :return:
         """
         db_job = SysJob(**job.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_job.job_id=worker.generate_id()
         db.add(db_job)
         await db.flush()
 

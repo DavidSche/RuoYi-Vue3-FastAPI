@@ -39,16 +39,17 @@ class OperationLogService:
         return operation_log_list_result
 
     @classmethod
-    async def add_operation_log_services(cls, query_db: AsyncSession, page_object: OperLogModel):
+    async def add_operation_log_services(cls, query_db: AsyncSession, new_log: OperLogModel):
         """
         新增操作日志service
 
         :param query_db: orm对象
-        :param page_object: 新增操作日志对象
+        :param new_log: 新增操作日志对象
         :return: 新增操作日志校验结果
         """
         try:
-            await OperationLogDao.add_operation_log_dao(query_db, page_object)
+
+            await OperationLogDao.add_operation_log_dao(query_db, new_log)
             await query_db.commit()
             return CrudResponseModel(is_success=True, message='新增成功')
         except Exception as e:

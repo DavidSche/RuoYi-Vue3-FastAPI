@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, BigInteger
 from config.database import Base
 
 
@@ -10,7 +10,7 @@ class SysJob(Base):
 
     __tablename__ = 'sys_job'
 
-    job_id = Column(Integer, primary_key=True, autoincrement=True, comment='任务ID')
+    job_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='任务ID')
     job_name = Column(String(64, collation='utf8_general_ci'), nullable=False, comment='任务名称')
     job_group = Column(String(64, collation='utf8_general_ci'), nullable=False, default='default', comment='任务组名')
     job_executor = Column(
@@ -46,7 +46,7 @@ class SysJobLog(Base):
 
     __tablename__ = 'sys_job_log'
 
-    job_log_id = Column(Integer, primary_key=True, autoincrement=True, comment='任务日志ID')
+    job_log_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='任务日志ID')
     job_name = Column(String(64, collation='utf8_general_ci'), nullable=False, comment='任务名称')
     job_group = Column(String(64, collation='utf8_general_ci'), nullable=False, comment='任务组名')
     job_executor = Column(

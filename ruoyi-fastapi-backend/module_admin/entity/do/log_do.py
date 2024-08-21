@@ -10,7 +10,7 @@ class SysLogininfor(Base):
 
     __tablename__ = 'sys_logininfor'
 
-    info_id = Column(Integer, primary_key=True, autoincrement=True, comment='访问ID')
+    info_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='访问ID')
     user_name = Column(String(50, collation='utf8_general_ci'), nullable=True, default='', comment='用户账号')
     ipaddr = Column(String(128, collation='utf8_general_ci'), nullable=True, default='', comment='登录IP地址')
     login_location = Column(String(255, collation='utf8_general_ci'), nullable=True, default='', comment='登录地点')

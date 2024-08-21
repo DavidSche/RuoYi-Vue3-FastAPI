@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, BigInteger
 from config.database import Base
 
 
@@ -10,8 +10,8 @@ class SysUser(Base):
 
     __tablename__ = 'sys_user'
 
-    user_id = Column(Integer, primary_key=True, autoincrement=True, comment='用户ID')
-    dept_id = Column(Integer, comment='部门ID')
+    user_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='用户ID')
+    dept_id = Column(BigInteger, comment='部门ID')
     user_name = Column(String(30, collation='utf8_general_ci'), nullable=False, comment='用户账号')
     nick_name = Column(String(30, collation='utf8_general_ci'), nullable=False, comment='用户昵称')
     user_type = Column(String(2, collation='utf8_general_ci'), default='00', comment='用户类型（00系统用户）')
@@ -38,8 +38,8 @@ class SysUserRole(Base):
 
     __tablename__ = 'sys_user_role'
 
-    user_id = Column(Integer, primary_key=True, nullable=False, comment='用户ID')
-    role_id = Column(Integer, primary_key=True, nullable=False, comment='角色ID')
+    user_id = Column(BigInteger, primary_key=True, nullable=False, comment='用户ID')
+    role_id = Column(BigInteger, primary_key=True, nullable=False, comment='角色ID')
 
 
 class SysUserPost(Base):
@@ -49,5 +49,5 @@ class SysUserPost(Base):
 
     __tablename__ = 'sys_user_post'
 
-    user_id = Column(Integer, primary_key=True, nullable=False, comment='用户ID')
-    post_id = Column(Integer, primary_key=True, nullable=False, comment='岗位ID')
+    user_id = Column(BigInteger, primary_key=True, nullable=False, comment='用户ID')
+    post_id = Column(BigInteger, primary_key=True, nullable=False, comment='岗位ID')

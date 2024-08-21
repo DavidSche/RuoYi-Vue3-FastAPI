@@ -1,5 +1,5 @@
 from datetime import datetime, time
-from sqlalchemy import and_, delete, desc, func, or_, select, update
+from sqlalchemy import and_, delete, desc, func, or_, select, update, ARRAY, String, cast, INTEGER
 from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.dept_do import SysDept
 from module_admin.entity.do.menu_do import SysMenu
@@ -14,8 +14,9 @@ from module_admin.entity.vo.user_vo import (
     UserRolePageQueryModel,
     UserRoleQueryModel,
 )
+from utils.id_util import SnowFlakeID
 from utils.page_util import PageUtil
-
+from sqlalchemy.dialects.postgresql import array
 
 class UserDao:
     """
@@ -292,8 +293,19 @@ class UserDao:
                 SysUser.del_flag == '0',
                 or_(
                     SysUser.dept_id == query_object.dept_id,
+                    # SysUser.dept_id.in_(
+                    #     select(SysDept.dept_id).where(func.find_in_set(query_object.dept_id, SysDept.ancestors))
+                    # ),
                     SysUser.dept_id.in_(
-                        select(SysDept.dept_id).where(func.find_in_set(query_object.dept_id, SysDept.ancestors))
+                        select(SysDept.dept_id).where(
+                            cast(query_object.dept_id, INTEGER) ==
+                            func.any(
+                                cast(
+                                    func.string_to_array(SysDept.ancestors, ','),
+                                    ARRAY(INTEGER)
+                                )
+                            )
+                        )
                     ),
                 )
                 if query_object.dept_id
@@ -334,6 +346,8 @@ class UserDao:
         :return: 新增校验结果
         """
         db_user = SysUser(**user.model_dump(exclude={'admin'}))
+        worker = SnowFlakeID(1, 1, 0)
+        db_user.user_id=worker.generate_id()
         db.add(db_user)
         await db.flush()
 

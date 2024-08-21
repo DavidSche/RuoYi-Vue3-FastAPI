@@ -4,6 +4,7 @@ from module_admin.entity.do.menu_do import SysMenu
 from module_admin.entity.do.role_do import SysRole, SysRoleMenu
 from module_admin.entity.do.user_do import SysUser, SysUserRole
 from module_admin.entity.vo.menu_vo import MenuModel, MenuQueryModel
+from utils.id_util import SnowFlakeID
 
 
 class MenuDao:
@@ -165,6 +166,8 @@ class MenuDao:
         :return:
         """
         db_menu = SysMenu(**menu.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_menu.menu_id=worker.generate_id()
         db.add(db_menu)
         await db.flush()
 

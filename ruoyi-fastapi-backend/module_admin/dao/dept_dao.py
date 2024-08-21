@@ -1,4 +1,4 @@
-from sqlalchemy import bindparam, func, or_, select, update  # noqa: F401
+from sqlalchemy import bindparam, func, or_, select, update, cast, INTEGER, ARRAY  # noqa: F401
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.util import immutabledict
 from typing import List
@@ -6,6 +6,7 @@ from module_admin.entity.do.dept_do import SysDept
 from module_admin.entity.do.role_do import SysRoleDept  # noqa: F401
 from module_admin.entity.do.user_do import SysUser
 from module_admin.entity.vo.dept_vo import DeptModel
+from utils.id_util import SnowFlakeID
 
 
 class DeptDao:
@@ -84,7 +85,16 @@ class DeptDao:
                     .where(
                         SysDept.dept_id != dept_info.dept_id,
                         ~SysDept.dept_id.in_(
-                            select(SysDept.dept_id).where(func.find_in_set(dept_info.dept_id, SysDept.ancestors))
+                            # select(SysDept.dept_id).where(func.find_in_set(dept_info.dept_id, SysDept.ancestors))
+                            select(SysDept.dept_id).where(
+                                cast(dept_info.dept_id, INTEGER) ==
+                                func.any(
+                                    cast(
+                                        func.string_to_array(SysDept.ancestors, ','),
+                                        ARRAY(INTEGER)
+                                    )
+                                )
+                            )
                         ),
                         SysDept.del_flag == '0',
                         SysDept.status == '0',
@@ -110,7 +120,16 @@ class DeptDao:
         :return: 子部门信息列表
         """
         dept_result = (
-            (await db.execute(select(SysDept).where(func.find_in_set(dept_id, SysDept.ancestors)))).scalars().all()
+            # (await db.execute(select(SysDept).where(func.find_in_set(dept_id, SysDept.ancestors)))).scalars().all()
+            (await db.execute(select(SysDept).where(cast(dept_id, INTEGER) ==
+                                                    func.any(
+                                                        cast(
+                                                            func.string_to_array(SysDept.ancestors, ','),
+                                                            ARRAY(INTEGER)
+                                                        )
+                                                    )))).scalars().all()
+
+
         )
 
         return dept_result
@@ -186,6 +205,8 @@ class DeptDao:
         :return: 新增校验结果
         """
         db_dept = SysDept(**dept.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_dept.dept_id = worker.generate_id()
         db.add(db_dept)
         await db.flush()
 
@@ -263,7 +284,9 @@ class DeptDao:
             await db.execute(
                 select(func.count('*'))
                 .select_from(SysDept)
-                .where(SysDept.status == '0', SysDept.del_flag == '0', func.find_in_set(dept_id, SysDept.ancestors))
+                # .where(SysDept.status == '0', SysDept.del_flag == '0', func.find_in_set(dept_id, SysDept.ancestors))
+                .where(SysDept.status == '0', SysDept.del_flag == '0', cast(dept_id, INTEGER) == func.any(
+                    cast(func.string_to_array(SysDept.ancestors, ','), ARRAY(INTEGER))))
             )
         ).scalar()
 

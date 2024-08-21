@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String, UniqueConstraint
+from sqlalchemy import Column, DateTime, Integer, String, UniqueConstraint, BigInteger
 from config.database import Base
 
 
@@ -10,7 +10,7 @@ class SysDictType(Base):
 
     __tablename__ = 'sys_dict_type'
 
-    dict_id = Column(Integer, primary_key=True, autoincrement=True, comment='字典主键')
+    dict_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='字典主键')
     dict_name = Column(String(100), nullable=True, default='', comment='字典名称')
     dict_type = Column(String(100), nullable=True, default='', comment='字典类型')
     status = Column(String(1), nullable=True, default='0', comment='状态（0正常 1停用）')
@@ -30,7 +30,7 @@ class SysDictData(Base):
 
     __tablename__ = 'sys_dict_data'
 
-    dict_code = Column(Integer, primary_key=True, autoincrement=True, comment='字典编码')
+    dict_code = Column(BigInteger, primary_key=True, autoincrement=True, comment='字典编码')
     dict_sort = Column(Integer, nullable=True, default=0, comment='字典排序')
     dict_label = Column(String(100), nullable=True, default='', comment='字典标签')
     dict_value = Column(String(100), nullable=True, default='', comment='字典键值')

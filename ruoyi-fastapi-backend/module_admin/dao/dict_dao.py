@@ -3,6 +3,7 @@ from sqlalchemy import and_, delete, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.dict_do import SysDictType, SysDictData
 from module_admin.entity.vo.dict_vo import DictDataModel, DictDataPageQueryModel, DictTypeModel, DictTypePageQueryModel
+from utils.id_util import SnowFlakeID
 from utils.page_util import PageUtil
 from utils.time_format_util import list_format_datetime
 
@@ -100,6 +101,8 @@ class DictTypeDao:
         :return:
         """
         db_dict_type = SysDictType(**dict_type.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_dict_type.dict_id = worker.generate_id()
         db.add(db_dict_type)
         await db.flush()
 
@@ -236,11 +239,13 @@ class DictDataDao:
         :param dict_data: 字典数据对象
         :return:
         """
-        db_data_type = SysDictData(**dict_data.model_dump())
-        db.add(db_data_type)
+        db_data_data = SysDictData(**dict_data.model_dump())
+        worker = SnowFlakeID(1, 1, 0)
+        db_data_data.dict_code = worker.generate_id()
+        db.add(db_data_data)
         await db.flush()
 
-        return db_data_type
+        return db_data_data
 
     @classmethod
     async def edit_dict_data_dao(cls, db: AsyncSession, dict_data: dict):

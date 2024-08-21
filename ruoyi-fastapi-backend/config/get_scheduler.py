@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import sessionmaker
 from typing import Union
-from config.database import AsyncSessionLocal, quote_plus
+from config.database import AsyncSessionLocal, quote_plus, SQLALCHEMY_DATABASE_URL
 from config.env import DataBaseConfig, RedisConfig
 from module_admin.dao.job_dao import JobDao
 from module_admin.entity.vo.job_vo import JobLogModel, JobModel
@@ -78,10 +78,10 @@ class MyCronTrigger(CronTrigger):
                     diff += 1
 
 
-SQLALCHEMY_DATABASE_URL = (
-    f'mysql+pymysql://{DataBaseConfig.db_username}:{quote_plus(DataBaseConfig.db_password)}@'
-    f'{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/{DataBaseConfig.db_database}'
-)
+# SQLALCHEMY_DATABASE_URL = (
+#     f'mysql+pymysql://{DataBaseConfig.db_username}:{quote_plus(DataBaseConfig.db_password)}@'
+#     f'{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/{DataBaseConfig.db_database}'
+# )
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     echo=DataBaseConfig.db_echo,

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, BigInteger
 from config.database import Base
 
 
@@ -10,7 +10,7 @@ class SysPost(Base):
 
     __tablename__ = 'sys_post'
 
-    post_id = Column(Integer, primary_key=True, autoincrement=True, comment='岗位ID')
+    post_id = Column(BigInteger, primary_key=True, autoincrement=True, comment='岗位ID')
     post_code = Column(String(64), nullable=False, comment='岗位编码')
     post_name = Column(String(50), nullable=False, comment='岗位名称')
     post_sort = Column(Integer, nullable=False, comment='显示顺序')
