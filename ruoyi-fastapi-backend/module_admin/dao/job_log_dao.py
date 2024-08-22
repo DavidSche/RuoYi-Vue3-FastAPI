@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from module_admin.entity.do.job_do import SysJobLog
 from module_admin.entity.vo.job_vo import JobLogModel, JobLogPageQueryModel
-from utils.id_util import SnowFlakeID
+from utils.id_util import snowflake
 from utils.page_util import PageUtil
 
 
@@ -52,8 +52,8 @@ class JobLogDao:
         :return:
         """
         db_job_log = SysJobLog(**job_log.model_dump())
-        worker = SnowFlakeID(1, 1, 0)
-        db_job_log.job_log_id=worker.generate_id()
+
+        db_job_log.job_log_id = snowflake.generate_id()
         db.add(db_job_log)
         db.flush()
 

@@ -6,7 +6,7 @@ from module_admin.entity.do.menu_do import SysMenu
 from module_admin.entity.do.role_do import SysRole, SysRoleMenu, SysRoleDept
 from module_admin.entity.do.user_do import SysUser, SysUserRole
 from module_admin.entity.vo.role_vo import RoleDeptModel, RoleMenuModel, RoleModel, RolePageQueryModel
-from utils.id_util import SnowFlakeID
+from utils.id_util import snowflake
 from utils.page_util import PageUtil
 
 
@@ -174,8 +174,8 @@ class RoleDao:
         :return:
         """
         db_role = SysRole(**role.model_dump(exclude={'admin'}))
-        worker = SnowFlakeID(1, 1, 0)
-        db_role.role_id=worker.generate_id()
+
+        db_role.role_id = snowflake.generate_id()
         db.add(db_role)
         await db.flush()
 

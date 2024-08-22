@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.post_do import SysPost
 from module_admin.entity.do.user_do import SysUserPost
 from module_admin.entity.vo.post_vo import PostModel, PostPageQueryModel
-from utils.id_util import SnowFlakeID
+from utils.id_util import snowflake
 from utils.page_util import PageUtil
 
 
@@ -101,8 +101,8 @@ class PostDao:
         :return:
         """
         db_post = SysPost(**post.model_dump())
-        worker = SnowFlakeID(1, 1, 0)
-        db_post.post_id=worker.generate_id()
+
+        db_post.post_id = snowflake.generate_id()
         db.add(db_post)
         await db.flush()
 

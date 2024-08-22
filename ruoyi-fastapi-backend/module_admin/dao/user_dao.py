@@ -14,7 +14,7 @@ from module_admin.entity.vo.user_vo import (
     UserRolePageQueryModel,
     UserRoleQueryModel,
 )
-from utils.id_util import SnowFlakeID
+from utils.id_util import snowflake
 from utils.page_util import PageUtil
 from sqlalchemy.dialects.postgresql import array
 
@@ -346,8 +346,8 @@ class UserDao:
         :return: 新增校验结果
         """
         db_user = SysUser(**user.model_dump(exclude={'admin'}))
-        worker = SnowFlakeID(1, 1, 0)
-        db_user.user_id=worker.generate_id()
+
+        db_user.user_id = snowflake.generate_id()
         db.add(db_user)
         await db.flush()
 

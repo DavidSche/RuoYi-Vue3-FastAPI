@@ -3,7 +3,7 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.notice_do import SysNotice
 from module_admin.entity.vo.notice_vo import NoticeModel, NoticePageQueryModel
-from utils.id_util import SnowFlakeID
+from utils.id_util import snowflake
 from utils.page_util import PageUtil
 
 
@@ -89,8 +89,8 @@ class NoticeDao:
         :return:
         """
         db_notice = SysNotice(**notice.model_dump())
-        worker = SnowFlakeID(1, 1, 0)
-        db_notice.notice_id=worker.generate_id()
+
+        db_notice.notice_id = snowflake.generate_id()
 
         db.add(db_notice)
         await db.flush()

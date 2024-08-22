@@ -6,7 +6,7 @@ from module_admin.entity.do.dept_do import SysDept
 from module_admin.entity.do.role_do import SysRoleDept  # noqa: F401
 from module_admin.entity.do.user_do import SysUser
 from module_admin.entity.vo.dept_vo import DeptModel
-from utils.id_util import SnowFlakeID
+from utils.id_util import snowflake
 
 
 class DeptDao:
@@ -205,8 +205,8 @@ class DeptDao:
         :return: 新增校验结果
         """
         db_dept = SysDept(**dept.model_dump())
-        worker = SnowFlakeID(1, 1, 0)
-        db_dept.dept_id = worker.generate_id()
+
+        db_dept.dept_id = snowflake.generate_id()
         db.add(db_dept)
         await db.flush()
 

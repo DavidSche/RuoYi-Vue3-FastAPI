@@ -216,7 +216,6 @@
 #     def closed(self: SnowflakeGenerator) -> bool:
 #         return self._closed.is_set()
 
-
 import time
 
 # 项目元年时间戳
@@ -251,78 +250,84 @@ class SnowFlakeID:
     用于生成IDs
     """
 
-    def __init__(self, machine_id=1, service_id=1, sequence=0):
+    def __init__(self, machine_id=1, service_id=1):
         """
         初始化
         :param machine_id: 机器ID
         :param service_id: 服务ID
-        :param sequence: 序号掩码
         """
         # 校验机器ID
-        if machine_id > MAX_MACHINE_ID or machine_id < 0:
+        if not (0 <= machine_id <= MAX_MACHINE_ID):
             raise ValueError('机器ID值越界')
 
         # 校验服务ID
-        if service_id > MAX_SERVICE_ID or service_id < 0:
+        if not (0 <= service_id <= MAX_SERVICE_ID):
             raise ValueError('服务ID值越界')
 
         self.machine_id = machine_id
         self.service_id = service_id
-        self.sequence = sequence
-
+        self.sequence = 0
         self.last_timestamp = -1  # 上次计算的时间戳
 
-    def _gen_timestamp(self):
+    @staticmethod
+    def _gen_timestamp():
         """
         生成整数时间戳
-        :return:int timestamp
+        :return: int timestamp
         """
         return int(time.time() * 1000)
+
+    @staticmethod
+    def _til_next_millis(last_timestamp):
+        """
+        等到下一毫秒
+        :param last_timestamp: 上次的时间戳
+        :return: int
+        """
+        timestamp = SnowFlakeID._gen_timestamp()
+        while timestamp <= last_timestamp:
+            timestamp = SnowFlakeID._gen_timestamp()
+        return timestamp
 
     def generate_id(self):
         """
         生成ID
-        :return:int
+        :return: int
         """
         timestamp = self._gen_timestamp()
 
-        # 时钟回拨
+        # 时钟回拨处理
         if (self.last_timestamp - timestamp) > 3:
             raise Exception('时钟回拨')
         if self.last_timestamp > timestamp:
             timestamp = self._til_next_millis(self.last_timestamp)
 
+        # 如果是同一毫秒内生成的ID
         if timestamp == self.last_timestamp:
-            self.sequence = self.sequence + 1
-            if self.sequence > MAX_SEQUENCE:
+            self.sequence = (self.sequence + 1) & MAX_SEQUENCE
+            if self.sequence == 0:
                 timestamp = self._til_next_millis(self.last_timestamp)
-                self.sequence = 0
         else:
             self.sequence = 0
 
         self.last_timestamp = timestamp
 
-        # 核心计算
-        gen_id = ((timestamp - START_TIMESTAMP) << TIMESTAMP_LEFT_SHIFT) | (self.machine_id << MACHINE_ID_SHIFT) | \
-                 (self.service_id << SERVICE_ID_SHIFT) | self.sequence
+        # 核心ID生成逻辑
+        gen_id = ((timestamp - START_TIMESTAMP) << TIMESTAMP_LEFT_SHIFT) | \
+                 (self.machine_id << MACHINE_ID_SHIFT) | \
+                 (self.service_id << SERVICE_ID_SHIFT) | \
+                 self.sequence
 
         return gen_id
 
-    def _til_next_millis(self, last_timestamp):
-        """
-        等到下一毫秒
-        """
-        timestamp = self._gen_timestamp()
-        while timestamp <= last_timestamp:
-            timestamp = self._gen_timestamp()
-        return timestamp
+snowflake = SnowFlakeID(machine_id=1, service_id=2)
 
 
 if __name__ == '__main__':
-    worker = SnowFlakeID(1, 1, 0)
+
     start_timestamp = int(time.time() * 1000)
     for i in range(10):
-        print(worker.generate_id())
+        print(snowflake.generate_id())
     end_timestamp = int(time.time() * 1000)
     waste_time = (end_timestamp - start_timestamp) / 1000
     print(waste_time)

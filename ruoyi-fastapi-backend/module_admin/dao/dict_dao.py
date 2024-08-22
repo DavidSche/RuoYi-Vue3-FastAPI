@@ -3,7 +3,7 @@ from sqlalchemy import and_, delete, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.dict_do import SysDictType, SysDictData
 from module_admin.entity.vo.dict_vo import DictDataModel, DictDataPageQueryModel, DictTypeModel, DictTypePageQueryModel
-from utils.id_util import SnowFlakeID
+from utils.id_util import  snowflake
 from utils.page_util import PageUtil
 from utils.time_format_util import list_format_datetime
 
@@ -101,8 +101,8 @@ class DictTypeDao:
         :return:
         """
         db_dict_type = SysDictType(**dict_type.model_dump())
-        worker = SnowFlakeID(1, 1, 0)
-        db_dict_type.dict_id = worker.generate_id()
+
+        db_dict_type.dict_id = snowflake.generate_id()
         db.add(db_dict_type)
         await db.flush()
 
@@ -240,8 +240,8 @@ class DictDataDao:
         :return:
         """
         db_data_data = SysDictData(**dict_data.model_dump())
-        worker = SnowFlakeID(1, 1, 0)
-        db_data_data.dict_code = worker.generate_id()
+
+        db_data_data.dict_code = snowflake.generate_id()
         db.add(db_data_data)
         await db.flush()
 
