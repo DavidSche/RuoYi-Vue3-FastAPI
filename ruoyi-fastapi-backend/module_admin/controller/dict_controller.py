@@ -7,6 +7,7 @@ from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
+from module_admin.controller.base_controller import set_create_datetime, set_update_datetime
 from module_admin.entity.vo.dict_vo import (
     DeleteDictDataModel,
     DeleteDictTypeModel,
@@ -53,10 +54,7 @@ async def add_system_dict_type(
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
-    add_dict_type.create_by = current_user.user.user_name
-    add_dict_type.create_time = datetime.now()
-    add_dict_type.update_by = current_user.user.user_name
-    add_dict_type.update_time = datetime.now()
+    await set_create_datetime(add_dict_type,current_user)
     add_dict_type_result = await DictTypeService.add_dict_type_services(request, query_db, add_dict_type)
     logger.info(add_dict_type_result.message)
 
@@ -72,8 +70,7 @@ async def edit_system_dict_type(
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
-    edit_dict_type.update_by = current_user.user.user_name
-    edit_dict_type.update_time = datetime.now()
+    await set_update_datetime(edit_dict_type,current_user)
     edit_dict_type_result = await DictTypeService.edit_dict_type_services(request, query_db, edit_dict_type)
     logger.info(edit_dict_type_result.message)
 
@@ -173,10 +170,7 @@ async def add_system_dict_data(
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
-    add_dict_data.create_by = current_user.user.user_name
-    add_dict_data.create_time = datetime.now()
-    add_dict_data.update_by = current_user.user.user_name
-    add_dict_data.update_time = datetime.now()
+    await set_create_datetime(add_dict_data,current_user)
     add_dict_data_result = await DictDataService.add_dict_data_services(request, query_db, add_dict_data)
     logger.info(add_dict_data_result.message)
 
@@ -192,8 +186,7 @@ async def edit_system_dict_data(
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
-    edit_dict_data.update_by = current_user.user.user_name
-    edit_dict_data.update_time = datetime.now()
+    await set_update_datetime(edit_dict_data,current_user)
     edit_dict_data_result = await DictDataService.edit_dict_data_services(request, query_db, edit_dict_data)
     logger.info(edit_dict_data_result.message)
 

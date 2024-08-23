@@ -8,6 +8,7 @@ from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
+from module_admin.controller.base_controller import set_create_datetime, set_update_datetime
 from module_admin.entity.vo.dept_vo import DeleteDeptModel, DeptModel, DeptQueryModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.dept_service import DeptService
@@ -61,10 +62,7 @@ async def add_system_dept(
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
-    add_dept.create_by = current_user.user.user_name
-    add_dept.create_time = datetime.now()
-    add_dept.update_by = current_user.user.user_name
-    add_dept.update_time = datetime.now()
+    await set_create_datetime(add_dept,current_user)
     add_dept_result = await DeptService.add_dept_services(query_db, add_dept)
     logger.info(add_dept_result.message)
 
@@ -83,8 +81,7 @@ async def edit_system_dept(
 ):
     if not current_user.user.admin:
         await DeptService.check_dept_data_scope_services(query_db, edit_dept.dept_id, data_scope_sql)
-    edit_dept.update_by = current_user.user.user_name
-    edit_dept.update_time = datetime.now()
+    await set_update_datetime(edit_dept, current_user)
     edit_dept_result = await DeptService.edit_dept_services(query_db, edit_dept)
     logger.info(edit_dept_result.message)
 
