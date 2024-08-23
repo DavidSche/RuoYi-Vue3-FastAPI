@@ -9,6 +9,7 @@ from config.env import UploadConfig
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
+from module_admin.controller.base_controller import set_create_datetime, set_update_datetime
 from module_admin.entity.vo.dept_vo import DeptModel
 from module_admin.entity.vo.user_vo import (
     AddUserModel,
@@ -87,10 +88,8 @@ async def add_system_user(
             query_db, ','.join([str(item) for item in add_user.role_ids]), role_data_scope_sql
         )
     add_user.password = PwdUtil.get_password_hash(add_user.password)
-    add_user.create_by = current_user.user.user_name
-    add_user.create_time = datetime.now()
-    add_user.update_by = current_user.user.user_name
-    add_user.update_time = datetime.now()
+    await set_create_datetime(add_user, current_user)
+
     add_user_result = await UserService.add_user_services(query_db, add_user)
     logger.info(add_user_result.message)
 
@@ -116,8 +115,7 @@ async def edit_system_user(
         await RoleService.check_role_data_scope_services(
             query_db, ','.join([str(item) for item in edit_user.role_ids]), role_data_scope_sql
         )
-    edit_user.update_by = current_user.user.user_name
-    edit_user.update_time = datetime.now()
+    await set_update_datetime(edit_user, current_user)
     edit_user_result = await UserService.edit_user_services(query_db, edit_user)
     logger.info(edit_user_result.message)
 

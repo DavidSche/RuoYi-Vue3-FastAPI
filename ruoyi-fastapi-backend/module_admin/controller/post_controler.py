@@ -6,6 +6,7 @@ from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
+from module_admin.controller.base_controller import set_create_datetime, set_update_datetime
 from module_admin.service.login_service import LoginService
 from module_admin.service.post_service import PostService
 from module_admin.entity.vo.post_vo import DeletePostModel, PostModel, PostPageQueryModel
@@ -43,10 +44,7 @@ async def add_system_post(
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
-    add_post.create_by = current_user.user.user_name
-    add_post.create_time = datetime.now()
-    add_post.update_by = current_user.user.user_name
-    add_post.update_time = datetime.now()
+    set_create_datetime(add_post,current_user)
     add_post_result = await PostService.add_post_services(query_db, add_post)
     logger.info(add_post_result.message)
 
@@ -62,8 +60,7 @@ async def edit_system_post(
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
-    edit_post.update_by = current_user.user.user_name
-    edit_post.update_time = datetime.now()
+    await set_update_datetime(edit_post,current_user)
     edit_post_result = await PostService.edit_post_services(query_db, edit_post)
     logger.info(edit_post_result.message)
 

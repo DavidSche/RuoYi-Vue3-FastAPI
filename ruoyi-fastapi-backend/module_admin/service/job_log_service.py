@@ -31,35 +31,35 @@ class JobLogService:
         return job_log_list_result
 
     @classmethod
-    def add_job_log_services(cls, query_db: Session, page_object: JobLogModel):
+    def add_job_log_services(cls, db: Session, db_job_log: JobLogModel):
         """
         新增定时任务日志信息service
 
-        :param query_db: orm对象
-        :param page_object: 新增定时任务日志对象
+        :param db: orm对象
+        :param db_job_log: 新增定时任务日志对象
         :return: 新增定时任务日志校验结果
         """
         try:
-            JobLogDao.add_job_log_dao(query_db, page_object)
-            query_db.commit()
+            JobLogDao.add_job_log_dao(db, db_job_log)
+            db.commit()
             result = dict(is_success=True, message='新增成功')
         except Exception as e:
-            query_db.rollback()
+            db.rollback()
             result = dict(is_success=False, message=str(e))
 
         return CrudResponseModel(**result)
 
     @classmethod
-    async def delete_job_log_services(cls, query_db: AsyncSession, page_object: DeleteJobLogModel):
+    async def delete_job_log_services(cls, query_db: AsyncSession, db_job_log: DeleteJobLogModel):
         """
         删除定时任务日志信息service
 
         :param query_db: orm对象
-        :param page_object: 删除定时任务日志对象
+        :param db_job_log: 删除定时任务日志对象
         :return: 删除定时任务日志校验结果
         """
-        if page_object.job_log_ids:
-            job_log_id_list = page_object.job_log_ids.split(',')
+        if db_job_log.job_log_ids:
+            job_log_id_list = db_job_log.job_log_ids.split(',')
             try:
                 for job_log_id in job_log_id_list:
                     await JobLogDao.delete_job_log_dao(query_db, JobLogModel(jobLogId=job_log_id))

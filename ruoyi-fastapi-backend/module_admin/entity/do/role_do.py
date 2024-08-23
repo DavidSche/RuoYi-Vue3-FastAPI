@@ -1,9 +1,9 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, BigInteger
-from config.database import Base
+from config.database import Base,BasePlus
 
 
-class SysRole(Base):
+class SysRole(BasePlus):
     """
     角色信息表
     """
@@ -23,10 +23,10 @@ class SysRole(Base):
     dept_check_strictly = Column(Integer, default=1, comment='部门树选择项是否关联显示')
     status = Column(String(1, collation='utf8_general_ci'), nullable=False, comment='角色状态（0正常 1停用）')
     del_flag = Column(String(1, collation='utf8_general_ci'), default='0', comment='删除标志（0代表存在 2代表删除）')
-    create_by = Column(String(64, collation='utf8_general_ci'), default='', comment='创建者')
-    create_time = Column(DateTime, default=datetime.now(), comment='创建时间')
-    update_by = Column(String(64, collation='utf8_general_ci'), default='', comment='更新者')
-    update_time = Column(DateTime, default=datetime.now(), comment='更新时间')
+    # create_by = Column(String(64, collation='utf8_general_ci'), default='', comment='创建者')
+    # create_time = Column(DateTime, default=datetime.now(), comment='创建时间')
+    # update_by = Column(String(64, collation='utf8_general_ci'), default='', comment='更新者')
+    # update_time = Column(DateTime, default=datetime.now(), comment='更新时间')
     remark = Column(String(500, collation='utf8_general_ci'), comment='备注')
 
 

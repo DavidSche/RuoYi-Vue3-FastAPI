@@ -1,9 +1,9 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, LargeBinary, String, BigInteger
-from config.database import Base
+from config.database import BasePlus
 
 
-class SysNotice(Base):
+class SysNotice(BasePlus):
     """
     通知公告表
     """
@@ -15,8 +15,8 @@ class SysNotice(Base):
     notice_type = Column(String(1, collation='utf8_general_ci'), nullable=False, comment='公告类型（1通知 2公告）')
     notice_content = Column(LargeBinary, comment='公告内容')
     status = Column(String(1, collation='utf8_general_ci'), default='0', comment='公告状态（0正常 1关闭）')
-    create_by = Column(String(64, collation='utf8_general_ci'), default='', comment='创建者')
-    create_time = Column(DateTime, comment='创建时间', default=datetime.now())
-    update_by = Column(String(64, collation='utf8_general_ci'), default='', comment='更新者')
-    update_time = Column(DateTime, comment='更新时间', default=datetime.now())
+    # create_by = Column(String(64, collation='utf8_general_ci'), default='', comment='创建者')
+    # create_time = Column(DateTime, comment='创建时间', default=datetime.now())
+    # update_by = Column(String(64, collation='utf8_general_ci'), default='', comment='更新者')
+    # update_time = Column(DateTime, comment='更新时间', default=datetime.now())
     remark = Column(String(255, collation='utf8_general_ci'), comment='备注')

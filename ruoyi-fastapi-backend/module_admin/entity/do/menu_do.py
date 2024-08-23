@@ -1,9 +1,9 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, BigInteger
-from config.database import Base
+from config.database import BasePlus
 
 
-class SysMenu(Base):
+class SysMenu(BasePlus):
     """
     菜单权限表
     """
@@ -25,8 +25,8 @@ class SysMenu(Base):
     status = Column(String(1), nullable=True, default='0', comment='菜单状态（0正常 1停用）')
     perms = Column(String(100), nullable=True, default=None, comment='权限标识')
     icon = Column(String(100), nullable=True, default='#', comment='菜单图标')
-    create_by = Column(String(64), nullable=True, default='', comment='创建者')
-    create_time = Column(DateTime, nullable=True, default=datetime.now(), comment='创建时间')
-    update_by = Column(String(64), nullable=True, default='', comment='更新者')
-    update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
+    # create_by = Column(String(64), nullable=True, default='', comment='创建者')
+    # create_time = Column(DateTime, nullable=True, default=datetime.now(), comment='创建时间')
+    # update_by = Column(String(64), nullable=True, default='', comment='更新者')
+    # update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
     remark = Column(String(500), nullable=True, default='', comment='备注')

@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from sqlalchemy.ext.asyncio import AsyncAttrs
@@ -26,4 +29,13 @@ AsyncSessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=a
 
 
 class Base(AsyncAttrs, DeclarativeBase):
+    pass
+
+
+class BasePlus(AsyncAttrs, DeclarativeBase):
+    create_by = Column(String(64), nullable=True, default='', comment='创建者')
+    create_time = Column(DateTime, nullable=True, default=datetime.now(), comment='创建时间')
+    update_by = Column(String(64), nullable=True, default='', comment='更新者')
+    update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
+
     pass
